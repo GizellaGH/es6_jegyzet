@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+                                    //  -----(VAR), LET, CONST-----
+
+/*         A var és a let változókat hoznak létre, míg a const konstanst. A különbség a SCOPE-ban rejlik. 
+        A VAR global és FUNCTION scope-ot használ, a let és a const pedig global és BLOCK scope-ot.
+        FUNCTION scope: Egy function on belül létrehozott változó, a function-on belül BÁRHOL elérhető és módosítható, azon kívül nem.
+        BLOCK scope: Egy blockon belül létrehozott változó, CSAK az adott blockon belül érhető el és módosítható. (A block esetünkben {}- zárójelet takar).
+
+        Példa FUNCTION scope-ra:  */
+
+//         function fScope(){
+//             if(4<5){
+//                 var i= 10;
+//                 console.log("i értéke function scope-al, if blockon belül: " + i); // i= 10;
+//             }
+//             if(i){
+//                 console.log("i értéke a korábbi if blockon kívül, de a function on belül: " + i);
+//             }else{
+//                 console.log("i nem létezik a korábbi if blockon kívül.");
+//             }
+//         }
+//         fScope();
+// /*         az i a function on kívül nem elérhető.
+
+//         példa BLOCK scope-ra: */
+//         function bScope(){
+//             if(4<5){
+//                 let i= 10;
+//                 console.log("i értéke block scope-al, if blockon belül: " + i); // i= 10;
+//             }
+//             if(typeof i != 'undefined'){
+//                 console.log("i értéke a korábbi if blockon kívül, de a function on belül: " + i);
+//             }else{
+//                 console.log("i nem létezik a korábbi if blockon kívül.");
+//             }
+//         }
+//         bScope();
+
+/*         az i a function on kívül nem elérhető.
+
+        Tehát let vagy const használata esetén, bármely {} zárójelet használó szerkezeten belül ( pl: for, while, if, etc.) létrehozott változó, azon kívül nem létezik. 
+
+        LET vs CONST:
+
+        A LET változót a CONST pedig állandót ad meg, így a let értéke szabadon változtatható:
+
+        let dinner= "salad";
+        dinner= "pizza";
+        dinner = 10;
+
+        Const al ez nem lehetséges:
+        const dinner= "salad";
+        dinner= "pizza"; -> ez hibát eredményez
+
+        AZONBAN
+
+        reference values( pl: array, object) esetében ez nem "teljesen" igaz.
+        Mivel a referencia értékek esetén az adatok "címe" kerül eltárolásra( ellenben a primitív értékeknél, ahol maga az érték), azok tartalmát lehet módosítani(hiszem attól a címe, ahol tárolva van, még nem változik. A cím az, ami állandó):
+
+        EZ MŰKÖDIK:
+        const foods= ['pizza'];
+        foods.push('steak');
+        Itt az array ugyan az marad, tehát a címe nem változik.
+
+        EZ NEM MŰKÖDIK:
+        const foods= ['pizza'];
+        foods= ['pizza', 'steak'];
+        Itt új arrayt próbáltunk a foodshoz hozzá rendelni ami új címen kerülne tárolásra, ez pedig nem lehetséges, hisz a cím állandó a const végett.
+        
+
+        egyéb kevésbé fontos különbségek var és let között:
+
+        re declare:
+        var name= "GUSZTI";              let name= "GUSZTI";
+        var name= "PISTA";               let name= "PISTA";
+        a név értéke PISTA lesz;         hibát dob;
+
+        Variable shadowing let-el is működik, tehát egy globálisan létrehozott name variable-t egy blockon belül létrehozhatok újra ugyan azzal a névvel: */
+
+        let name= "pista";
+        function reName(){
+            let name= "guszti";
+        }
+
+        // Így a name értéke globálisan pista, de a reName function on belül "guszti"
+
+                                    //  -----ARROW FUNCTION-----
+
+/*     function létrehozásának módjai:
+
+        -Function Declaration:
+        function sum(a, b){
+            return a+b;
+        }
+        Ebben az esetben, a function bárhol megírható a kódon belül, és hívható.
+
+        -Function Expression:
+        const sum= function(a, b){
+            return a+b;
+        }
+        Ebben az esetben, először meg kell írni a functiont és csak aztán hívható.
+
+        -Arrow Function:
+        const sum= (a, b) => {
+            return a+b;
+        }
+
+        Előnyök, "trükkök": 
+        -Ha a block csak egy expressionből áll, a kapcsos zárójel és a return elhagyható(ilyen esetben MINDIG ott van egy láthatatlan RETURN az exprression előtt):
+        const sum= (a, b) => a+b;
+
+        -Ha csak egy argumentumot kér a function, a zárójelek elhagyhatóak:
+        const sum= a => {
+            const b= 5;
+            return a+b;
+        }
+
+        -Ha csak egy argumentum és expression van, értelemszerűen: 
+        const sum= a => a+5;
+
+        -Ha nincs agrumentum, üres zárójelet teszünk:
+        const sum= () => 5+10;
+
+        Egyéb sajátosságok további kifejtése a classoknál lentebb.
+ */
+
+                                    //  -----TEMPLATE STRING-----
+
+        /* 
+        const name= "Pista";
+        const age= 30;
+        -Stringek, változók összefűzése régen:
+
+        console.log("Üdvözlünk" + name + "! " + "Te " + age + " éves vagy!");
+
+        -Összefűzés template-el:
+
+        console.log=(`Üdvözlünk ${name}! Te ${age} éves vagy!`);
+
+        A szöveget  idézőjelek helyett backtick-ek (altgr + 7) írjuk, a változók pedig $ jelet követő {} közé kerülnek.
+        */
+                                    //  -----DEFAULT ARGUMENTS, REST, SPREAD-----
+
+        /* 
+            -Default arguments:
+            Egy function megírásakor, van mód argumentseknek default érték megadására. Ha a function hívásakor az érintett argumentum undefined, nincs megadva, a default érték kerül felhasználásra.
+
+            pl: 
+            const beosztas= (munkanapok= ['hetfo', 'kedd'])=> console.log(munkanapok);
+
+            Ha argumentum nélkül hívjuk a beosztas fuctiont, automatikusan hetfo, kedd lesz a munkanapunk. Ha adunk meg argumentumot, a default érték nem kerül felhasználásra:
+
+            beosztas() ---> ['hetfo', 'kedd'];
+            beosztas(['szerda', 'csutortok']) ---> ['szerda', 'csutortok'];
+
+            Figyeljünk arra, hogy ha több argumentumos a function, lehetőleg a default értékkel rendelkező legyen az utolsó. Ellenkező esetben:
+
+            const beo= (munkanap = 'kedd', szabadnap)=> console.log(`munkanap: ${munkanap}, szabadnap${szabadnap});
+            beo('hétfő'); ---> munkanap= hétfő; szabadnap= undefined;
+            A munkanap behúzza az első elérhető argumentumot és a szabadnapnak már nem marad semmi.
+
+            helyesen: const beo= (szabadnap, munkanap= 'kedd')=> console.log(`munkanap: ${munkanap}, szabadnap${szabadnap});
+
+            -Rest operator: function létrehozásakor előfordulhat, hogy nem tudni előre, hány argumentum fog beérkezni, mert pl user inputból származnak. A rest operátor( három pont az argumentum neve előtt), a beérkező argumentumokat, mindegy hány darab van belőle, automatikusan egy arraybe gyűjti:
+
+            const sum= (...numbers)=>{
+                let sum= 0;
+                for(const num of numbers){
+                    sum+= num;
+                }
+                return sum;
+            }
+            sum(100, 10, 5); ---> 115;
+            sum(4, 8, 18, 100) ---> 130;
+
+            Az argumentumok között, mindig rest operator legyen az utolsó, mert lefoglal minden értéket, amit function híváskor megadunk:
+
+            const helytelen= (...numbers, a, b)=>{};
+            const helyes(a, b, ...numbers)=>{};
+
+            A fenti okból kifolyólag, csak egy rest operatort, használhatunk:
+            const helytelen= (...numbers, ...extraNumbers)=>{};
+
+            -Spread operator: 
+             -Array Spread: A spread operátor ugyanúgy néz ki mint a rest( három pont), de felhasználása eltérő. Használatával elemeire bonthatunk egy array-t. Olyan helyeken használható, ahol az adataink tömbben vannak tárolva, de a használni kívánt method nem fogad el array-t argumentumként, csak önálló értékeket.
+             Tökéletes:
+                -tömbök valós másolására. Mivel elemekre bontja a tömböt, nem egy reference értékünk lesz(tömb), hanem több primitív(a tömb elemei), ez által másolhatóak.
+
+             pl:
+             const numbers= [1, 2, 3, 4, 5];
+             const copiedNumbers= [...numbers];
+
+             Így két egymástól független array-t kaptunk.DE:
+
+             Nested reference values-nél ez nem eredményez tökéletes másolatot:
+             const topDevelopers= [{name: 'pista', age: 55}, {name: 'lujza', age: 19}];
+             const copiedTopDevelopers= [...fejlesztok];
+             Ez esetben a copiedfejlesztok egy onallo, uj array, de az elemei nem. Pista és lujza ugyan arra a két létező objektumra mutat, amik a topDevelopers arrayben vannak. Ha szükséges, map() methoddal megoldható, hogy az arraybe ágyazott reference értékekről is valódi másolat készüljön.
+
+
+                -Math method használatakor:
+             Math.min(...numbers); (Argumentumként megadott számok közül, megadja a legkisebbet. Csak különálló számokat fogad el argumentumként, tömböt nem, hiába vannak számok tárolva benne.)
+
+             -Object Spread: Ugyanúgy használható, mint array-ok esetén. 
+             De pl objectbe ágyazott reference valueról is könnyedén készíthetünk valódi másolatot:
+
+             const developers= {name: 'pista', tools: ['html', 'css', 'tailwind']};
+             const copiedDevs= {...developers, tools: [...deveopers.tools]};
+
+
+        */
+
+
+                                    //  -----DESTRUCTURING-----
+
+        /* 
+        -Array destructuring:
+
+            const numbers= [1, 2, 3, 4, 5];
+
+            -Elemekhez hozzáférése és tárolása változókban klasszikus módon:
+            const elso= numbers[0];
+            const masodik= numbers[1];
+            etc...
+
+            -Elemek hozzáférése és tárolása DESTRUCTURING segítségével:
+            const [elso, masodik, harmadik, negyedik, otodik]= numbers;
+            Az array elemei sorban el lettek tárolva a fenti konstansokba.
+
+            HA valamelyik elemre nincs szükségünk( pl a harmadikra), elég egy szóközt ütni a név helyére:
+            const [elso, masodik, , negyedik, otodik]= numbers;
+
+            Van mód csak az első néhány elemet változóhoz vagy konstanshoz rendelni, a maradékot(rest) pedig egy arrabe tenni ( rest operatorral):
+            const [elso, masodik, ...maradek]= numbers;
+            Eredményül kapunk két konstans változót ( elso= 1; masodik= 2;) és egy tömböt(maradek= [3, 4, 5]);
+
+        -Object destructuring:
+            const numbers= {
+                elso: 1,
+                masodik: 2,
+                harmadik: () => console.log('methodokat is kinyerhetünk destructuring segítségével');
+            }
+
+            -Properties hozzáférése és tárolása klasszikus módon:
+            const elso= numbers.elso;
+            const masodik= numbers.masodik;
+
+            -Ugyanez destructuringel:
+            const{elso, masodik, harmadik}= numbers;
+            FONTOS: Array destructuring esetében bármilyen nevű változóba eltárolhatjuk az elemeket, DE object destructuringnél a változók nevei meg kell, hogy egyezzenek a property nevekkel. ( hiszen itt nincs index szerinti sorba rendezés mint egy arraynél. Itt key value párok vannak.)
+
+            Tárolás elétrő névve:
+            const{elso: ujelso, masodik: ujMasodik, harmadik: ujHarmadik}= numbers;
+            A prop name után : -ot téve adhatunk meg új nevet a változóknak, ha az objecten belül használt prop név nem megfelelő( mert pl már használatban van).
+
+            Itt is használható a REST operator úgy, ahogy array destructuringnél. a maradék egy új object-ben lesz eltárolva. 
+
+        */
+
+
+                                    //  -----FOR OF-----
+
+/* 
+        A for of, afor loop egy változata, array ek iterálására.
+
+        const numbers= [1, 2, 3, 4, 5];
+        
+        Iterálás sima for looppal:
+        for (let i= 0; i< numbers.length; i++){
+            console.log(numbers[i]);
+        }
+
+        Iterálás for of looppal:
+        for(const number of numbers){
+            console.log(number);
+        }
+        A for of loop végigmegy a numbers minden elemén és az aktuális elem értékét a number konstansba tárolja az aktuális körre. A loopon belül az aktuális elem értéke a number konstanson keresztül érhető el.
+        FONTOS: ebben a formában, szemben az egyszerű for looppal, az aktuális elem indexe NEM érhető el.
+
+        Index hozzáférés for of loop esetében:
+
+        for(const [i, number] of numbers.entries()){
+            console.log(`index: ${i}, érték: ${number});
+        }
+        A fenti példában egyszerre használunk destructuringot és az entries() method ot.
+
+        vagy:
+
+        let i= 0;
+        for(const number of numbers){
+            console.log(`index: ${i}, érték: ${number});
+            i++;
+        }
+*/
+                                    //  -----MAP, SET, WEAK VERSIONS-----
+
+/* 
+        Array-hoz hasonló adatszerkezetek, de sokkal ritkábban használtak. Saját beépített methodokkal rendelkeznek.
+
+        SET: Bármilyen iterálható adat tárolására alkalmas. NINCS index vagy key value pár, a tárolt adatok sorrendje nem fontos és nem is meghatározható. DE minden eleme garantáltan egyedi, nem lehetséges duplikáció.
+
+        MAP: Bármilyen adat tárolására alkalmas. Key value párokat tartalmaz (akárcsak egy object), DE a key bármi lehet: object és array is, illetve a az elemek sorrendje meghatározott. Minden key egyedi, de a value lehet azonos több elemnél is. Az elemekhez hozzáférni a key-en keresztül lehet.
+
+        Azzal, hogy object is lehet key, extra információkat kapcsolhatunk objectekhez, anélkül, hogy azokat szigorúan beleírnánk
+
+        -SET:
+
+        const emptySet= new Set(); - ez egy üres set;
+        const numbers= new Set([1, 2, 3, 4, 5]); - ez egy set, ami számokat tárol. 
+
+        -Ha olyan elemet próbálunk hozzáadni (add method), amit már tartalmaz, nem történik semmi( hiszen a duplikáció nem lehetséges).
+
+        numbers.add(6);
+
+        -Ha olyan elemet próbálunk törölni, ami nem létezik, szintén nem történik semmi( egyik esetben sem dob hibát).
+        -Az elemekhez önmagában nem férhetünk hozzá, hiszen nincs sem index, sem key, helyette leellenőrizhetük, hogy létezik e az adott elem.
+
+        numbers.has(5); -> a válasz boolean, esetünkben true.
+
+        -MAP: 
+
+        const developer1= {name: 'Frici', level: 'itsOver9000'};
+        const developer2= {name: 'Gerzson', level: 'noob'};
+        const developer3= {name: 'Helga', level: 'ShesNotEvenAProgrammer'};
+
+        const developers= new Map([[developer1, {favouriteColor: 'red', age: 44}], [developer2, {favouriteColor: 'green', age: 19}]]);
+
+        A fenti példában arrayon belül tároljuk a key-t és a value-t. A korábban létrehozott object a key(programmer1) és egy hozzá rendelt, új object a value. 
+        
+        A tárolt value-t a get() methoddal nyerhetjük ki, a key megadásával:
+
+        developers.get(developer1);
+        
+        Új elemet a set() methoddal adhatunk hozzá.
+
+        developers.set(developer3, {favouriteColor: 'blue', age: 14});
+
+        Hozzáférhetünk a map teljes tartalmához is, különböző módokon:
+
+        for(const anything of developers.entries()){
+            console.log(anything);
+        }
+        Minden elemnek létrehoz egy array-t, két elemmel( key, value). Ez SET adatszerkezetnél is használható, de ott mivel nincs key, ezért az arrayban kétszer szerepel majd az érték...
+
+        destructuringgal:
+        for(const [key, value] of developers.entries()){
+            console.log(key, value);
+        }
+
+        Ha csak a key kell:
+        for(const key of developers.keys()){
+            console.log(key);
+        }
+
+        ha csak a value érdekes:
+
+        for(const value of developers.values()){
+            console.log(value);
+        }
+
+        -WEAKSET, WEAKMAP:
+        Mindkettő csak objectet(vagy array-t) fogad. Kevesebb methoddal rendelkezik mint a sima verzió.
+        Cserébe, ha olyan adatot tárolnak, amit a kód további részében nem használunk, engedik a garbage collectornak, hogy törölje azt a memóriából(heap). (azért fogad csak arrayt vagy objectet, mert azok referencia értékek és csak azok vannak a memóriában tárolva). 
+
+*/
+
+                                    //  -----PROMISES (async)-----
+
+
+/* 
+A js alapvetően egy single thread nyelv, tehát egyszerre egy feladatot tud végrehajtani. Sorban halad végig a kódon és akkor kezd el egy feladatot, ha az előzőt befejezte. (Synchronous Code Execution);
+Ugyanakkor van lehetőségünk Asynchronous (async) futtatásra. Ez esetben a soron következő művelet nem várja meg, hogy az async kódrész befejeződjön. Az async kód futtatását átveszi a browser ami képes multiple threads futtatására. 
+Az async feladatok bekerülnek a message queue ba, ahol várakoznak, amíg a browser végre nem hajtja őket. Az event loop pedig figyeli a message queue-t és a stacket (ahol a js által futtatott kódok vannak). Ha a message queue ben van befejezett feladat és a stackben nem fut éppen semmi, akkor fogja a befejezett async feladatot és a message queueből visszarakja a stackbe. ( visszahelyezi a js single thread munkafolyamába).
+
+Ennek megvalósítására több eszközünk is van:
+
+-Callbacks : Régi megoldás. Működik, de ha több, egymást követő, vagy egymásra épülő callbackre van szükségünk, a callbackeket egymásba kell ágyaznunk és olvashatatlan okádék kódot kapunk ( callback hell). Vannak olyan beépített, régi api-k amiknek nincs promise verziója és callbacket használnak. pl setTimeout. 
+
+-Promise : es6 feature, nem egymásba ágyazza a történéseket, hanem azok egymást követik, így sokkal olvashatóbb kódot eredményez. 
+A promise egy class és a constructora egy functiont fogad el argumentumként. Ennek a functionnek pedig két argumentuma van: resolve(sikeres futás esetén ez történik) és reject(sikertelen futás esetén ez történik). Egyébként bárminek elnevezhetjük őket, ez is működik: 
+
+const GazsiPromisza= new Promise((gazsiOrul, gazsiSzomoru)=>{
+
+})
+
+Ez esetben persze később resolve-ot és reject-et kell írnunk, amikor meghatározzuk mi történjen, hanem gazsiOrul-t és gazsiSzomoru-t. 
+
+-Async/await: ES8 feature 2017-ből(promiseket használ a motorháztető alatt). Többnyire ezt használják már, de van ahol a nyers promise kézenfekvőbb.
+*/
+
+//promise példa:
+const flipACoin= ()=>{
+    const flip= Math.random();
+    const coin= flip>0.5 ? 'head' : 'tail';
+    return coin;
+}
+// a flipACoin function egy érmefeldobást jelképez, az eredmény fej vagy írás lesz. Az érme feldobás két másodpercet vesz igénybe. A fej jelképzeli majd, hogy sikeres volt a promise, az írás pedig, hogy sikertelen. 
+
+//Az eredmény véletlenszerű, ezért van hogy elég sokszor le kell futtatni, hogy mind a két eredmény kijöjjön.
+
+const promise= new Promise((resolve, reject)=>{
+    console.log('fut a promise! Feldobok egy érmét.');
+    const coin= flipACoin();
+    setTimeout(() => {
+        console.log('Elakptam.');
+        coin==='head' ? resolve('ez fej lett.') : reject('ez írás lett.');
+    }, 2000);
+ })
+ .then(data=>{
+     console.log("első then: " +data);
+     const promise= new Promise((resolve, reject)=>{ //nem szükséges így deklarálni az új promise-t, írhatjuk úgy is, hogy: return new Promise((resolve, reject)=>{"kód a promisen belül"});
+         setTimeout(() => {
+             resolve('üzenet az első thentől a másodiknak')
+         }, 1000);
+     })
+    return promise;
+    }) // Az első then visszaad egy értéket amelyet a második then felvesz. Mivel az első then egy promise-t futtat, ezért az ezt követő thenek megvárják amíg ez a promise lefut.
+ .then(data=>{
+     console.log('második then, ezt kapta az elsőtől: '+data);
+     return 'üzenet a második thentől a harmadiknak';
+ }) //A második then is visszaad egy értéket amelyet a harmadik then felvesz. egy setTimeouttal jelképezzük, hogy a harmadik thenben levő kód lefutásához két másodperc szükséges. 
+ .then(data=>{
+     setTimeout(() => {
+         console.log('harmadik then, ezt kapta a másodiktól: '+data);
+     }, 2000);
+ }) // a catch method kezeli azt az eshetőséget, ha a promiseunk eredménye sikertelen (reject). A catch methodot bárhova tehetjük a promise-t követően. Sikertelen eredmény esetén a promise és a catch közötti kód nem fut le, viszont a catch utáni then-ek lefutnak. 
+ .catch(data=>console.log(data)) //a negyedik then siker és sikertelenség esetén is lefut, mert a catch method után következik. A negyedik then megelőzi a harmadik thent, mert a thenek nem várnak egymásra, csak a sorban legutolsó promise lefutását várják meg. 
+ .then(()=>{
+     console.log('én vagyok a negyedik then. Én mindenképpen lefutok.');
+ })
+
+ console.log('Promise-en kívüli kód');
+
+ //Ha olyan promise-t akarunk írni, amit csak később használunk fel, tegyük egy function-be:
+
+ const promiseForLater= ()=>{
+     return new Promise((resolve, reject)=>{
+         //ide jöhet a kód.
+     })
+ }
+
+ /* Ha le akarjuk futtatni, simán csak meghívjuk a function-t:
+    promiseForLater();
+ */
+
+ /* Egyéb lehetőségek a promise class static methodjai által(ezt már csak bemásolom):
+
+ const promise1 = new Promise((resolve, reject) => resolve("Resolved promise1!"));
+const promise2 = new Promise((resolve, reject) => reject("Rejected promise2!"));
+const promise3 = new Promise((resolve, reject) => resolve("Resolved promise3!"));
+const allPromises = [promise1, promise2, promise3];
+
+Promise.all(allPromises).then((results) => {
+  //if all promises in the collection resolves, `results` is an array of [promise1 result, promise2 result, promise3 result]
+}).catch((error) => {
+  //if any promise is rejected, `error` will have the rejected value of the promise that failed
+  //if multiple failed, `error` will be the error of the first one that failed
+});
+
+Promise.allSettled(allPromises).then((results) => {
+  //waits until all promises either resolved or rejected
+  //`results` will be an array of [promise1 result, promise2 result, promise3 result]
+});
+
+Promise.race(allPromises).then((value) => {
+  //waits until first promise in array is resolved
+  //`value` will be the resolved value of the first promise resolved
+}).catch((value) => {
+  //waits until first promise in array is rejected
+  //`value` will be the rejected value of the first promise rejected
+});
+
+Promise.resolve(); //makes a promise that instantly resolves
+
+Promise.reject(); //makes a promise that instantly rejects
+ */
+
+                                    //  -----ITERATORS, GENERATORS, PROXIES, SYMBOLS, REFLECT API-----
+//Eléggé ritkán használt és advance featurek, amikre fix, hogy egy jó darabig nem lesz szükségünk, de lehet, hogy kb soha. :) 
+
+                                    //  -----MATH, NUMBER, STRING, ARRAY, OBJECT APIs-----
+
+// Egy csomó beépített method, sok lenne mindet felsorolni, szerintem egyelőre elég átnézni egy felsorolást, hogy mik vannak, aztán ha valamelyikre szükség van, google segít. Valószínűleg nem igényelnek különösebb magyarázatot, úgy ahogy a Math.min(1,2,3,4,5); is adja magát :)
+
+                                    //  -----CLASSES, MODULES)-----
+
+    //Rendkívül fontosak, csak hát beesteledett :D...
+
+
+
+
+
+    </script>
+</body>
+</html>
