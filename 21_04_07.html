@@ -394,7 +394,7 @@ const GazsiPromisza= new Promise((gazsiOrul, gazsiSzomoru)=>{
 
 })
 
-Ez esetben persze később resolve-ot és reject-et kell írnunk, amikor meghatározzuk mi történjen, hanem gazsiOrul-t és gazsiSzomoru-t. 
+Ez esetben persze később sem resolve-ot és reject-et kell írnunk, amikor meghatározzuk mi történjen, hanem gazsiOrul-t és gazsiSzomoru-t. 
 
 -Async/await: ES8 feature 2017-ből(promiseket használ a motorháztető alatt). Többnyire ezt használják már, de van ahol a nyers promise kézenfekvőbb.
 */
@@ -429,7 +429,7 @@ const promise= new Promise((resolve, reject)=>{
  .then(data=>{
      console.log('második then, ezt kapta az elsőtől: '+data);
      return 'üzenet a második thentől a harmadiknak';
- }) //A második then is visszaad egy értéket amelyet a harmadik then felvesz. egy setTimeouttal jelképezzük, hogy a harmadik thenben levő kód lefutásához két másodperc szükséges. 
+ }) //A második then is visszaad egy értéket amelyet a harmadik then felvesz.
  .then(data=>{
      setTimeout(() => {
          console.log('harmadik then, ezt kapta a másodiktól: '+data);
