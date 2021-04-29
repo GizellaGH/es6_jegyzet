@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        /* A classok tervrajzként szolgálnak több, egyforma szerkezetű object létrehozására.  
+        Az objecteknél propertynek nevezett adatokat itt fieldnek hívjuk. Gyakorlati különbség nem igazán van, de a megírásuk eltérő: 
+        -property ---> name : "bela", age : 55, gender : male
+        -field    ---> name = "bela"; age : 55; gender : male
+        Egy fieldnek állíthatunk be default értéket, de üresen is hagyhatjuk( hiszen a class alapján történő object létrehozásakor adjuk majd meg az adott object paramétereit).
+        */
+        // Egyszerű class 4 fields el:
+
+/*         class Item{
+            defaultValue = 'sweet';
+            shape;
+            height;
+            color;
+        } 
+
+        Új objectet könnyedén létrehozhatunk:
+        const circle= new Item();
+*/
+        /* Constructor method: Egy speciális method, amely segítségével az objectum létrehozásakor adhatjuk meg a fields ek értékeit. */
+        class Item{
+            defaultV = 'sweet';
+            shape;
+            height;
+            color;
+
+            constructor(defaultValue, shapeValue, heightValue, colorValue){
+                this.defaultV= defaultValue;
+                this.shape= shapeValue;
+                this.height= heightValue;
+                this.color= colorValue;
+                this.dots= [1, 2, 3, 4, 5];
+                this.num= [6, 7, 8];
+            }
+
+            po(){
+                this.dots.forEach(e=>{
+                    console.log(this.color, e);
+                    this.num.forEach(e=>{
+                        console.log(this.shape, e);
+                    })
+                })
+            }
+        } 
+
+        /* classon belüli method létrehozása formailag: methodName(){}
+        a végére nem rakunk ;-t.
+        A class fieldjeire a this. keyword segítségével mutatunk rá: this.shape(ennek a klassznak a shape fieldje) és a constructor method argumentumát kapja meg értékként(ezeket mindegy minek nevezzük el). Tehát a fenti példában:
+        this.shape= shapeValue; 
+        
+        A fenti, egyszerű példa akkor is működik, ha nem definiáljuk előre a fieldeket, csak a constructor methodban hozzuk létre őket(lásd this.dots, vagy köv példa):
+
+        class Item{
+            constructor(defaultValue, shapeValue, heightValue, colorValue){
+                this.defaultValue= defaultValue;
+                this.shape= shapeValue;
+                this.height= heightValue;
+                this.color= colorValue;
+            }
+        } 
+        */
+
+        /* A constructornak az objectum létrehozásakor adjuk meg az argumentumokat: */
+
+        const circle= new Item('overwritedDefault', 'circle', 20, 'green');
+        circle.po();
+        /*This és ARROW FUNCTION:
+            Az arrow ()=>{}, máshogy kezeli a this-t mint a klasszikus forma function(){}. 
+            -A klasszikus forma a környezetében levő this értékekhez fér hozzá. egy object vagy class esetében maga az o./class az a közeg amiben a function létezik, tehát az o./class this értékeihez fér hozzá. Hozzábindeli a this-hez a környező paramétereket. 
+            -Az arrow function viszont nem az őt körülvevő közegben levő this értékekhez fér hozzá, hanem úgymond megörökli a hozzáférést a környezetétől. Amihez a környezet hozzáBindelte a thist, ő azt örökli meg. Az object vagy class azonban ebben az értelemben sehova se bindeli a this-t, így egy arrow func, ami közvetlenül objectben v classban lett létrehozva, nem fér hozzá a this értékekhez.
+
+            Most érthetően példákkal:
+
+            Gyakorlatilag, egyszerűsítve: KÖZVETLENÜL classon vagy objecten belül ne használjunk nyíl fügvényt, mert nem látja a this értékeket, használjuk a fent látott formát: superLameFunction(){}
+            NESTED FUNCTION esetén használjunk arrow functiont. A beágyazott method(classic forma) a környezetében keresi a this értékeket, hogy bindelje őket, de ott nem fog találni semmit, hisz a külső methodban nincsenek this értékek. 
+            Az arrow function azonban megörökli a környezetétől ( külső method) a this bindelést, ezért ő hozzáfér a this értékekhez:
+            -Ez rossz:
+            class BimBum{
+                constructor(){
+                    this.darabszam=[1,2,3];
+                    this.macska='cirmi';
+                }
+                macskaSzamlalo(){
+                    this.darabszam.forEach(function(darab){
+                        console.log(darab, this.macska); --- a this.macska nem elérhető innen a beágyazott methodból, mert nem a külső methodban lett létrehozva.
+                    })
+                }
+
+                popecMacskaSzamlalo(){
+                    this.darabszam.forEach(darab=>{
+                        console.log(darab, this.macska); --- nyílfügvénnyel akármilyen mélységű beágyazásból elérjük az object v class this értékeit. 
+                    })
+                }
+            }
+
+            Szóval: Objecten vagy Classon belül közvetlenül létrehozott method klasszikus forma, azokba beágyazva arrow. 
+
+        */
+
+
+
+
+
+    </script>
+</body>
+</html>
