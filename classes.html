@@ -47,9 +47,9 @@
             po(){
                 this.dots.forEach(e=>{
                     console.log(this.color, e);
-                    this.num.forEach(e=>{
+                    this.num.forEach(function(e){
                         console.log(this.shape, e);
-                    })
+                    }.bind(this))
                 })
             }
         } 
@@ -95,6 +95,12 @@
                     this.darabszam.forEach(function(darab){
                         console.log(darab, this.macska); --- a this.macska nem elérhető innen a beágyazott methodból, mert nem a külső methodban lett létrehozva.
                     })
+                } ez a verzió, csak akkor működik, ha manuálisan bindeljük a thist(bármilyen mélységben beágyazott method esetén működik a .bind(this)):
+
+                macskaSzamlaloManualBind(){
+                    this.darabszam.forEach(function(darab){
+                        console.log(darab, this.macska);
+                    }.bind(this)) <----itt a bindelés
                 }
 
                 popecMacskaSzamlalo(){
