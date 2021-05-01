@@ -28,7 +28,7 @@
         Új objectet könnyedén létrehozhatunk:
         const circle= new Item();
 */
-        /* Constructor method: Egy speciális method, amely segítségével az objectum létrehozásakor adhatjuk meg a fields ek értékeit. */
+        /* CONSTRUCTOR METHOD: Egy speciális method, amely segítségével az objectum létrehozásakor adhatjuk meg a fields ek értékeit. */
         class Item{
             defaultV = 'sweet';
             shape;
@@ -78,7 +78,7 @@
 /*         const circle= new Item('overwritedDefault', 'circle', 20, 'green');
         circle.po(); */
 
-        /*This és ARROW FUNCTION: ----------------------------
+        /*THIS és ARROW FUNCTION: ----------------------------
 
             Az arrow ()=>{}, máshogy kezeli a this-t mint a klasszikus forma function(){}. 
             -A klasszikus forma a környezetében levő this értékekhez fér hozzá. egy object vagy class esetében maga az o./class az a közeg amiben a function létezik, tehát az o./class this értékeihez fér hozzá. Hozzábindeli a this-hez a környező paramétereket. 
@@ -171,7 +171,7 @@
                 class ThisIsASubClass extends TheBaseClass{}
                 Ha a subclass nem rendelkezik saját constructorral, automatikusan megörökli a baseclass constructorát. Ha a subclass is kap saját constructort, akkor az fog életbe lépni. Ahhoz, hogy a saját constructor és a baseclass constructora is lefusson, a subclass constructorában meg kell hívnunk a super() methodot, amely lefuttatja a baseclass constructorát. FONTOS, hogy a super() legyen az első parancs, amit a subclass constructorába írunk. 
             */
-
+            /* PRIVATE: field, property vagy method neve elé #-t téve, priváttá tehetjük azt. Ennek eredményeként, az érintett elem nem lesz meghívható, módósítható, elérhető a classon kívül. Privát elemek neve elé újra és újra ki kell tennünk a #-t ha hivatkozunk rájuk, lásd a lenti példában a width. Kívülről csak akkor elérhetőek ezek az propertyk, ha létezik hozzájuk getter vagy setter, vagy más custom method, ami lehetővé teszi a property elérését.  */
             class Privi{
                 #width= 10;
 
@@ -182,10 +182,37 @@
                 this.#width= val;
             }
             }
-            const privi= new Privi;
-            privi.width;
-            privi.width= 20;
-            privi.width;
+            const privike= new Privi;
+            privike.width;
+            privike.width= 20;
+            privike.width;
+
+            /* INSTANCEOF : akár csak a typeof booleant ad vissza. leellenőrzi, hogy egy object a vizsgált classbol származik e. pl:
+            privi instanceof privike -->true
+            privi instanceof brokkoliclass --> false
+            */
+
+            /* OBJECT DESCRIPTORS: (Nem class és nem es6 de kicsit témába vág)
+            Descriptorral módosításokat végezhetünk objecteken és azok properties-én.
+
+            Object.getOwnPropertyDescriptors(object név) 
+            
+            methoddal, megnézhetjük egy object "leírását". propertyknél és methodoknál a következők szerepelnek:
+            configurable: pl törölhető e(boolean)
+            enumerable: for loopnál (for in), foglalkozzon e a loop az adott propertyvel, szerepeljen e a listán.(boolean)
+            value: érték.
+            writable: írható e. ( módosítható e az érték)(boolean)
+
+            módosítás:
+            Object.defineProperty(object név, 'property név', {
+                configurable: true,
+                enumerable: true,
+                value: prop név,
+                writable: true
+            });
+             */
+
+
     </script>
 </body>
 </html>
