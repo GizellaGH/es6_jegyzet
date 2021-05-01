@@ -73,9 +73,13 @@
 
         /* A constructornak az objectum létrehozásakor adjuk meg az argumentumokat: */
 
-        const circle= new Item('overwritedDefault', 'circle', 20, 'green');
-        circle.po();
-        /*This és ARROW FUNCTION:
+
+            //FUTTATÁSI KÓD ALÁBB KIKOMMENTELVE
+/*         const circle= new Item('overwritedDefault', 'circle', 20, 'green');
+        circle.po(); */
+
+        /*This és ARROW FUNCTION: ----------------------------
+
             Az arrow ()=>{}, máshogy kezeli a this-t mint a klasszikus forma function(){}. 
             -A klasszikus forma a környezetében levő this értékekhez fér hozzá. egy object vagy class esetében maga az o./class az a közeg amiben a function létezik, tehát az o./class this értékeihez fér hozzá. Hozzábindeli a this-hez a környező paramétereket. 
             -Az arrow function viszont nem az őt körülvevő közegben levő this értékekhez fér hozzá, hanem úgymond megörökli a hozzáférést a környezetétől. Amihez a környezet hozzáBindelte a thist, ő azt örökli meg. Az object vagy class azonban ebben az értelemben sehova se bindeli a this-t, így egy arrow func, ami közvetlenül objectben v classban lett létrehozva, nem fér hozzá a this értékekhez.
@@ -110,14 +114,78 @@
                 }
             }
 
-            Szóval: Objecten vagy Classon belül közvetlenül létrehozott method klasszikus forma, azokba beágyazva arrow. 
+            Szóval: Objecten vagy Classon belül közvetlenül létrehozott method klasszikus forma, azokba beágyazva arrow ( vagy classic form + .bind(this)). 
 
+            egyéb: class in class, class as arg,--------------------
+
+            -STATIC method, property, field:
+            Létrehozhatunk classokat static fieldekkel és methodokkal. Ilyenkor nem hozunk létre különböző objecteket a classból, hanem a classra hivatkozva hívjuk meg a static methodokat:
+
+            class Food(){
+                static taste= "good"
+
+                static eat(){
+                    console.log(`This food is${this.taste}. MMmMhmhmhmhmh`)
+                }
+            }
+
+            Food.eat();
+
+            A nem static ( instance) classokat ismétlődő logika újrahasználatára használjuk, a static methodos classokat pedig inkább kisegítésre. Klasszok közötti kommunikáció megvalósítására, azok összekötésére, vagy közös funkcionalitáson osztoznának a classok. etc. 
+
+
+            -GET, SET:
+
+            speciális "method", paraméterek értékének megadására és hozzáférésére, irányított feltételek mellett. 
+            Használata: get vagy set keyword majd a property neve + () {}
         */
+            class GetSet{
+                #_width;
+                #width;
+                constructor(w){
+                    this._width= w;//Ha a construcorba beérkező értéket rögtön a this.width propertybe mentjük, az végtelen loopba helyezi a gettert és összeomlik a program.
+                    this.width= this._width;// ez a sor opcionális. Azért van, hogy az objektum létrehozásakor már működésbe lépjen a setter(legalább is nekem csak így sikerült). Ennek hiányában csak akkor lépnek életbe a setterben leírt feltételek, ha az objektum létrehozása után módosítjuk a width propertyt( pl objektumnev.width= 20)
+                }
 
+                set width(val){
+                    if(typeof val!="number"){
+                        this._width= 2;
+                        return
+                    }
+                    this._width= val+1;
+                }
 
+                get width(){
+                    return this._width*3;
+                }
+            }
+                //FUTTATÁSI KÓD ALÁBB KIKOMMENTELVE
+/*             const proba= new GetSet(10);
+            console.log(proba.width); */
 
+            /*A fenti példa alapján a setter egy prop értékének megadásánál játszik szerepet, a getter pedig a beállított érték kinyerésénél. A setter és a getter igazából(mégha úgy is néznek ki mint a methodok), propertyk és nem methodok. Propertyk, amik lehetőséget adnak egy bizonyos logika mentén megadni a propertyk értékét, vagy visszakapni azokat. Ezért ha használni akarjuk őket, úgy hivatkozunk rájuk mint propertykre --> objektumnév.width és nem úgy mint methodokra -->objektumnév.width()  
+            A setter és getter szerepet játszik az encapsulation-ben, de ahhoz private propertyk kellenek.*/
 
+            /* INHERITANCE:
+                Ha több különböző classunk van, amelyek ugyanolyan propertyket , methodokat használnak, közös logika szerint működnek, ámde bizonyos dolgokban eltérnek, használhatunk inheritance-t. Ilyenkor létrehozunk egy base classt, amely a közös logikát tartalmazza, és azokból örököltetünk subclassokat, amelyek bírnak a base class minden tulajdonságával, de ezeken felül rendelkeznek egyedi tulajdonságokkal is. Az öröklődést az extends kulcsszó segítségével tehetjük meg:
+                class ThisIsASubClass extends TheBaseClass{}
+                Ha a subclass nem rendelkezik saját constructorral, automatikusan megörökli a baseclass constructorát. Ha a subclass is kap saját constructort, akkor az fog életbe lépni. Ahhoz, hogy a saját constructor és a baseclass constructora is lefusson, a subclass constructorában meg kell hívnunk a super() methodot, amely lefuttatja a baseclass constructorát. FONTOS, hogy a super() legyen az első parancs, amit a subclass constructorába írunk. 
+            */
 
+            class Privi{
+                #width= 10;
+
+            get width(){
+                console.log(this.#width);
+            }
+            set width(val){
+                this.#width= val;
+            }
+            }
+            const privi= new Privi;
+            privi.width;
+            privi.width= 20;
+            privi.width;
     </script>
 </body>
 </html>
